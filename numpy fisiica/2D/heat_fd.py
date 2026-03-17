@@ -22,7 +22,7 @@ para resolver a mesma equação e comparar desempenho
 """
 
 # PARÂMETROS FÍSICOS
-L = 5.0 #Barra
+L = 1.0 #Barra
 alpha = 0.01
 T_quente = 100
 T_fria = 0
