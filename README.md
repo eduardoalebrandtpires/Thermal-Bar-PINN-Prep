@@ -25,4 +25,4 @@ where:
 * Matplotlib
 
 ## Future Work
-This project will be extended by training a **Physics-Informed Neural Network (PINN)** to solve the same heat equation and compare its performance with the traditional numerical solver.
+This project will be extended by training a **Physics-Informed Neural Network (PINNs)** to solve the same heat equation and compare its performance with the traditional numerical solver.
