@@ -44,8 +44,8 @@ dx = L/(Nx-1)
 dt = T_total/Nt
 x = np.linspace(0, L, Nx)
 
-# VERIFICAÇÃO DE ESTABILIDADE (Dica da Rita) 
-# Se r > 0.5 a solução explode e vira infinito.
+# VERIFICAÇÃO DE ESTABILIDADE 
+# Se r > 0.5 a solução explode e vira infinito
 r = alpha * dt / dx**2
 print(f"Coeficiente r = {r:.4f}")
 
@@ -72,7 +72,7 @@ for n in range(0, Nt-1):
         u[n+1,i] = u[n,i] + r*(u[n,i+1] - 2*u[n,i] + u[n,i-1])
 
 #  SOLUÇÃO TEÓRICA (RETA) 
-# No estado estacionário, vira uma reta.
+# No estado estacionário, vira uma reta
 u_estacionario = T_quente + (T_fria - T_quente)*x/L
 
 #  ANÁLISE DE ERRO 
@@ -80,35 +80,28 @@ u_estacionario = T_quente + (T_fria - T_quente)*x/L
 erro = np.abs(u[-1] - u_estacionario)
 print("\nANÁLISE DE ERRO")
 print("Erro médio =", np.mean(erro))
-
-#  GRÁFICOS
-plt.figure(figsize=(8,5))
-plt.plot(x, u[0], label="Início")
-plt.plot(x, u[Nt//2], label="Meio")
-plt.plot(x, u[-1], 'r', label="Final numérico")
-plt.plot(x, u_estacionario, '--k', label="Reta teórica")
-plt.title("Propagação de calor na barra")
-plt.legend()
-plt.grid(True)
-plt.show()
-
-# Gráfico do Erro
-plt.figure(figsize=(8,4))
-plt.plot(x, erro, color='orange')
-plt.title("Erro da solução numérica")
-plt.show()
-
-# Gráfico da Energia
 energia = np.sum(u, axis=1)*dx
-plt.figure(figsize=(8,4))
-plt.plot(np.linspace(0, T_total, Nt), energia)
-plt.title("Energia térmica total")
-plt.show()
+fig, axs = plt.subplots(2,2, figsize=(10,8))
 
-# Mapa de Calor (padrão de paper)
-plt.figure(figsize=(10,5))
-plt.imshow(u, aspect='auto', cmap='hot', extent=[0, L, T_total, 0])
-plt.colorbar(label="Temp")
-plt.title("Mapa de calor da barra")
-plt.show()
+# Temperatura final
+axs[0,0].plot(x, u[-1], 'r', label="Final")
+axs[0,0].plot(x, u_estacionario, '--k', label="Teórico")
+axs[0,0].set_title("Perfil de Temperatura")
+axs[0,0].legend()
 
+# Erro
+axs[0,1].plot(x, erro)
+axs[0,1].set_title("Erro Numérico")
+
+# Energia
+axs[1,0].plot(np.linspace(0,T_total,Nt), energia)
+axs[1,0].set_title("Energia térmica")
+
+# Mapa de calor
+im = axs[1,1].imshow(u, aspect='auto', cmap='hot', extent=[0,L,T_total,0])
+axs[1,1].set_title("Mapa de calor")
+
+fig.colorbar(im, ax=axs[1,1])
+
+plt.tight_layout()
+plt.show()
